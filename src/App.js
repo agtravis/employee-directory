@@ -6,12 +6,32 @@ import Navbar from './components/Navbar';
 import Container from './components/Container';
 import ColumnHeaders from './components/ColumnHeaders';
 import './App.css';
+import API from './utils/API';
+import List from './components/List';
 // import Discover from './pages/Discover';
 // import About from './pages/About';
 // import Search from './pages/Search';
 // import Footer from './components/Footer';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      result: [],
+    };
+  }
+
+  componentDidMount() {
+    this.searchEmployees();
+  }
+
+  searchEmployees = () => {
+    API.search().then((res) => {
+      console.log(res.data.results);
+      this.setState({ result: res.data.results });
+    });
+  };
+
   render() {
     return (
       <Router>
@@ -21,6 +41,7 @@ class App extends React.Component {
             <Navbar />
             <Container>
               <ColumnHeaders />
+              <List employees={this.state.result} />
             </Container>
           </Wrapper>
           {/* <Navbar />
