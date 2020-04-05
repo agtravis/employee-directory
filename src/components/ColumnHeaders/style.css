@@ -1,0 +1,11 @@
+.column-headers {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 2px solid #ffff00;
+  align-items: center;
+  padding-bottom: 15px;
+}
+
+.column-headers p {
+  text-align: center;
+}
