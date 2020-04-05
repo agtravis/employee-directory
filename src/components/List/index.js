@@ -1,11 +1,32 @@
 import React from 'react';
+import './style.css';
 
 function List(props) {
   return (
     <ul className="list-group">
       {props.employees.map((employee) => (
         <li key={employee.login.uuid} className="list-group-item">
-          {employee.name.first}
+          <div className="pic">
+            <img
+              src={employee.picture.thumbnail}
+              alt={`${employee.name.first} ${employee.name.last}`}
+              title={`${employee.name.first} ${employee.name.last}`}
+            />
+          </div>
+          <div className="info">
+            <p>{`${employee.name.first} ${employee.name.last}`}</p>
+          </div>
+          <div className="info">
+            <p>{employee.cell}</p>
+          </div>
+          <div className="email">
+            <p>{employee.email}</p>
+          </div>
+          <div className="info">
+            <p>
+              {new Date(Date.parse(employee.dob.date)).toLocaleDateString()}
+            </p>
+          </div>
         </li>
       ))}
     </ul>

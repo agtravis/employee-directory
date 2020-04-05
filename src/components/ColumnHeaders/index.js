@@ -4,19 +4,19 @@ import './style.css';
 function ColumnHeaders() {
   return (
     <div className="column-headers">
-      <div>
-        <p>Image</p>
+      <div className="image">
+        <p></p>
       </div>
-      <div>
+      <div className="info">
         <p>Name</p>
       </div>
-      <div>
+      <div className="info">
         <p>Phone</p>
       </div>
-      <div>
+      <div className="email">
         <p>Email</p>
       </div>
-      <div>
+      <div className="info">
         <p>DOB</p>
       </div>
     </div>
