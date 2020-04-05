@@ -9,7 +9,7 @@ function ColumnHeaders(props) {
       </div>
       <div className="info">
         <p className="sortable" onClick={() => props.sortEmployees(`name`)}>
-          Name<i class="tiny material-icons">arrow_drop_down</i>
+          Name<i className="tiny material-icons">arrow_drop_down</i>
         </p>
       </div>
       <div className="info">
@@ -20,7 +20,7 @@ function ColumnHeaders(props) {
       </div>
       <div className="info">
         <p className="sortable" onClick={() => props.sortEmployees(`dob`)}>
-          DOB<i class="tiny material-icons">arrow_drop_down</i>
+          DOB<i className="tiny material-icons">arrow_drop_down</i>
         </p>
       </div>
     </div>

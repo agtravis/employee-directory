@@ -18,6 +18,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       result: [],
+      lastSort: ``,
     };
   }
 
@@ -27,35 +28,45 @@ class App extends React.Component {
 
   searchEmployees = () => {
     API.search().then((res) => {
-      console.log(res.data.results);
       this.setState({ result: res.data.results });
     });
   };
 
-  // new Date(Date.parse(employee.dob.date)).toLocaleDateString()
-
   sortEmployees = (propertyToSort) => {
     let sortedEmployees;
+    let sortStatus;
     switch (propertyToSort) {
       case `name`:
-        sortedEmployees = this.state.result.sort((a, b) =>
-          a.name.last > b.name.last ? 1 : -1
-        );
-        this.setState({ result: sortedEmployees });
+        if (this.state.lastSort !== propertyToSort) {
+          sortedEmployees = this.state.result.sort((a, b) =>
+            a.name.last > b.name.last ? 1 : -1
+          );
+          sortStatus = propertyToSort;
+        } else {
+          sortedEmployees = this.state.result.sort((a, b) =>
+            a.name.last > b.name.last ? -1 : 1
+          );
+          sortStatus = ``;
+        }
+        this.setState({ result: sortedEmployees, lastSort: sortStatus });
         break;
       case `dob`:
-        sortedEmployees = this.state.result.sort((a, b) =>
-          a.dob.date > b.dob.date ? 1 : -1
-        );
-        this.setState({ result: sortedEmployees });
+        if (this.state.lastSort !== propertyToSort) {
+          sortedEmployees = this.state.result.sort((a, b) =>
+            a.dob.date > b.dob.date ? 1 : -1
+          );
+          sortStatus = propertyToSort;
+        } else {
+          sortedEmployees = this.state.result.sort((a, b) =>
+            a.dob.date > b.dob.date ? -1 : 1
+          );
+          sortStatus = ``;
+        }
+        this.setState({ result: sortedEmployees, lastSort: sortStatus });
         break;
       default:
         console.log(`nothing provided`);
     }
-    // const sortedEmployees = this.state.result.sort(
-    //   (a, b) => a.propertyToSort - b.propertyToSort
-    // );
-    // this.setState({ result: sortedEmployees });
   };
 
   render() {
