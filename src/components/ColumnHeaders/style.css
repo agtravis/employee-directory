@@ -6,8 +6,10 @@
   padding-bottom: 15px;
 }
 
-.column-headers p {
+.sortable {
   text-align: center;
+  cursor: pointer;
+  font-weight: bolder;
 }
 
 .image {

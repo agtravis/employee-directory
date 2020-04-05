@@ -32,6 +32,32 @@ class App extends React.Component {
     });
   };
 
+  // new Date(Date.parse(employee.dob.date)).toLocaleDateString()
+
+  sortEmployees = (propertyToSort) => {
+    let sortedEmployees;
+    switch (propertyToSort) {
+      case `name`:
+        sortedEmployees = this.state.result.sort((a, b) =>
+          a.name.last > b.name.last ? 1 : -1
+        );
+        this.setState({ result: sortedEmployees });
+        break;
+      case `dob`:
+        sortedEmployees = this.state.result.sort((a, b) =>
+          a.dob.date > b.dob.date ? 1 : -1
+        );
+        this.setState({ result: sortedEmployees });
+        break;
+      default:
+        console.log(`nothing provided`);
+    }
+    // const sortedEmployees = this.state.result.sort(
+    //   (a, b) => a.propertyToSort - b.propertyToSort
+    // );
+    // this.setState({ result: sortedEmployees });
+  };
+
   render() {
     return (
       <Router>
@@ -40,7 +66,7 @@ class App extends React.Component {
           <Wrapper>
             <Navbar />
             <Container>
-              <ColumnHeaders />
+              <ColumnHeaders sortEmployees={this.sortEmployees} />
               <List employees={this.state.result} />
             </Container>
           </Wrapper>

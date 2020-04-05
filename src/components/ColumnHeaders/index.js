@@ -1,14 +1,16 @@
 import React from 'react';
 import './style.css';
 
-function ColumnHeaders() {
+function ColumnHeaders(props) {
   return (
     <div className="column-headers">
       <div className="image">
         <p></p>
       </div>
       <div className="info">
-        <p>Name</p>
+        <p className="sortable" onClick={() => props.sortEmployees(`name`)}>
+          Name<i class="tiny material-icons">arrow_drop_down</i>
+        </p>
       </div>
       <div className="info">
         <p>Phone</p>
@@ -17,7 +19,9 @@ function ColumnHeaders() {
         <p>Email</p>
       </div>
       <div className="info">
-        <p>DOB</p>
+        <p className="sortable" onClick={() => props.sortEmployees(`dob`)}>
+          DOB<i class="tiny material-icons">arrow_drop_down</i>
+        </p>
       </div>
     </div>
   );
