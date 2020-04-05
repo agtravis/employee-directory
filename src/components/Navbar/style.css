@@ -1,3 +1,24 @@
-nav.navbar.navbar-default {
-  margin-bottom: 0;
+nav {
+  background-color: #000000;
+  /* padding-bottom: 20px; */
+  border-bottom: 3px solid #ffff00;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.filters {
+  width: 95%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+p {
+  color: #ffff00;
+}
+
+.birthdate {
+  width: 20%;
 }

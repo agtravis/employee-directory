@@ -6,9 +6,9 @@ import logo from '../../assets/images/logo.png';
 function Header() {
   return (
     <header>
-      <div class="container">
-        <div class="row">
-          <div id="company-name" class="col s12 m12 l12">
+      <div className="container">
+        <div className="row">
+          <div id="company-name" className="col s12 m12 l12">
             <h1>Employee Directory</h1>
             <img
               src={logo}
