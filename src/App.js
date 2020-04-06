@@ -20,6 +20,8 @@ class App extends React.Component {
       result: [],
       lastSort: ``,
       search: ``,
+      startDate: ``,
+      endDate: ``,
     };
   }
 
@@ -27,8 +29,8 @@ class App extends React.Component {
     this.searchEmployees();
   }
 
-  handleChange = (event) => {
-    this.setState({ search: event.target.value });
+  handleChange = (event, field) => {
+    this.setState({ [field]: event.target.value });
   };
 
   searchEmployees = () => {
@@ -106,6 +108,8 @@ class App extends React.Component {
               findByName={this.findByName}
               handleChange={this.handleChange}
               searchText={this.state.search}
+              startDate={this.state.startDate}
+              endDate={this.state.endDate}
             />
             <Container>
               <ColumnHeaders sortEmployees={this.sortEmployees} />

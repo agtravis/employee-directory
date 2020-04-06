@@ -28,13 +28,17 @@ function Navbar(props) {
           id="start-date"
           type="date"
           style={inputStyle}
-          defaultValue={`1980-04-05`}
+          // defaultValue={`1980-04-05`}
+          value={props.startDate}
+          onChange={(event) => props.handleChange(event, `startDate`)}
         />
         <input
           id="end-date"
           type="date"
           style={inputStyle}
-          defaultValue={`1990-04-05`}
+          // defaultValue={`1990-04-05`}
+          value={props.endDate}
+          onChange={(event) => props.handleChange(event, `endDate`)}
         />
         <button
           className="dobSearch"
@@ -50,7 +54,7 @@ function Navbar(props) {
           style={inputStyle}
           placeholder="Enter full or partial name"
           value={props.searchText}
-          onChange={(event) => props.handleChange(event)}
+          onChange={(event) => props.handleChange(event, `search`)}
           onKeyUp={(event) => {
             if (event.key === `Enter`) {
               props.findByName(document.getElementById(`name`).value);
