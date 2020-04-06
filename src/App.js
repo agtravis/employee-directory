@@ -32,6 +32,17 @@ class App extends React.Component {
     });
   };
 
+  findByName = (searchString) => {
+    searchString = searchString.toLowerCase();
+    const foundByName = [...this.state.result].filter((employee) => {
+      return (
+        employee.name.first.toLowerCase().indexOf(searchString) !== -1 ||
+        employee.name.last.toLowerCase().indexOf(searchString) !== -1
+      );
+    });
+    this.setState({ result: foundByName });
+  };
+
   filterEmployees = (startDate, endDate) => {
     let start = new Date(startDate);
     let end = new Date(endDate);
@@ -85,7 +96,10 @@ class App extends React.Component {
         <div>
           <Header />
           <Wrapper>
-            <Navbar filterEmployees={this.filterEmployees} />
+            <Navbar
+              filterEmployees={this.filterEmployees}
+              findByName={this.findByName}
+            />
             <Container>
               <ColumnHeaders sortEmployees={this.sortEmployees} />
               <List employees={this.state.result} />

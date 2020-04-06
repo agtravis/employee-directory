@@ -4,10 +4,16 @@ import './style.css';
 
 // Depending on the current path, this component sets the "active" class on the appropriate navigation link item
 function Navbar(props) {
+  const inputStyle = {
+    width: '20%',
+    backgroundColor: 'white',
+    paddingLeft: '5px',
+  };
+
   return (
     <nav>
       <div className="filters">
-        <p
+        <button
           className="dobSearch"
           onClick={() =>
             props.filterEmployees(
@@ -17,24 +23,37 @@ function Navbar(props) {
           }
         >
           Find by Date of Birth:
-        </p>{' '}
+        </button>{' '}
         <input
           id="start-date"
           type="date"
-          style={{ width: '25%', backgroundColor: 'white' }}
+          style={inputStyle}
           defaultValue={`1980-04-05`}
-        />{' '}
-        {` `}{' '}
+        />
         <input
           id="end-date"
           type="date"
-          style={{ width: '25%', backgroundColor: 'white' }}
+          style={inputStyle}
           defaultValue={`1990-04-05`}
         />
+        <button
+          className="dobSearch"
+          onClick={() =>
+            props.findByName(document.getElementById(`name`).value)
+          }
+        >
+          Search by Name:
+        </button>
         <input
+          id="name"
           type="text"
-          style={{ width: '25%', backgroundColor: 'white' }}
-          placeholder="Search by name..."
+          style={inputStyle}
+          placeholder="Enter full or partial name"
+          onKeyUp={(event) => {
+            if (event.key === `Enter`) {
+              props.findByName(document.getElementById(`name`).value);
+            }
+          }}
         />
       </div>
     </nav>
