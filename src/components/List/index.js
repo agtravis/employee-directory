@@ -23,9 +23,7 @@ function List(props) {
             <p>{employee.email}</p>
           </div>
           <div className="info">
-            <p>
-              {new Date(Date.parse(employee.dob.date)).toLocaleDateString()}
-            </p>
+            <p>{new Date(employee.dob.date).toLocaleDateString()}</p>
           </div>
         </li>
       ))}

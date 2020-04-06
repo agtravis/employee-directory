@@ -1,17 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router /*, Route*/ } from 'react-router-dom';
+import API from './utils/API';
+import './App.css';
 import Header from './components/Header';
 import Wrapper from './components/Wrapper';
 import Navbar from './components/Navbar';
 import Container from './components/Container';
 import ColumnHeaders from './components/ColumnHeaders';
-import './App.css';
-import API from './utils/API';
 import List from './components/List';
-// import Discover from './pages/Discover';
-// import About from './pages/About';
-// import Search from './pages/Search';
-// import Footer from './components/Footer';
 
 class App extends React.Component {
   constructor(props) {
@@ -20,8 +15,8 @@ class App extends React.Component {
       result: [],
       lastSort: ``,
       search: ``,
-      startDate: ``,
-      endDate: ``,
+      startDate: `1980-01-01`,
+      endDate: `1990-01-01`,
     };
   }
 
@@ -99,33 +94,23 @@ class App extends React.Component {
 
   render() {
     return (
-      <Router>
-        <div>
-          <Header />
-          <Wrapper>
-            <Navbar
-              filterEmployees={this.filterEmployees}
-              findByName={this.findByName}
-              handleChange={this.handleChange}
-              searchText={this.state.search}
-              startDate={this.state.startDate}
-              endDate={this.state.endDate}
-            />
-            <Container>
-              <ColumnHeaders sortEmployees={this.sortEmployees} />
-              <List employees={this.state.result} />
-            </Container>
-          </Wrapper>
-          {/* <Navbar />
+      <div>
+        <Header />
         <Wrapper>
-          <Route exact path="/" component={About} />
-          <Route exact path="/about" component={About} />
-          <Route exact path="/discover" component={Discover} />
-          <Route exact path="/search" component={Search} />
+          <Navbar
+            filterEmployees={this.filterEmployees}
+            findByName={this.findByName}
+            handleChange={this.handleChange}
+            searchText={this.state.search}
+            startDate={this.state.startDate}
+            endDate={this.state.endDate}
+          />
+          <Container>
+            <ColumnHeaders sortEmployees={this.sortEmployees} />
+            <List employees={this.state.result} />
+          </Container>
         </Wrapper>
-        <Footer /> */}
-        </div>
-      </Router>
+      </div>
     );
   }
 }
