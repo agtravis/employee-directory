@@ -19,12 +19,17 @@ class App extends React.Component {
     this.state = {
       result: [],
       lastSort: ``,
+      search: ``,
     };
   }
 
   componentDidMount() {
     this.searchEmployees();
   }
+
+  handleChange = (event) => {
+    this.setState({ search: event.target.value });
+  };
 
   searchEmployees = () => {
     API.search().then((res) => {
@@ -99,6 +104,8 @@ class App extends React.Component {
             <Navbar
               filterEmployees={this.filterEmployees}
               findByName={this.findByName}
+              handleChange={this.handleChange}
+              searchText={this.state.search}
             />
             <Container>
               <ColumnHeaders sortEmployees={this.sortEmployees} />

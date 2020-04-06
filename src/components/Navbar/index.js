@@ -49,6 +49,8 @@ function Navbar(props) {
           type="text"
           style={inputStyle}
           placeholder="Enter full or partial name"
+          value={props.searchText}
+          onChange={(event) => props.handleChange(event)}
           onKeyUp={(event) => {
             if (event.key === `Enter`) {
               props.findByName(document.getElementById(`name`).value);
