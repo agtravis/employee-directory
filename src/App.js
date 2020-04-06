@@ -32,6 +32,16 @@ class App extends React.Component {
     });
   };
 
+  filterEmployees = (startDate, endDate) => {
+    let start = new Date(startDate);
+    let end = new Date(endDate);
+    const filteredEmployees = [...this.state.result].filter((employee) => {
+      let date = new Date(employee.dob.date);
+      return date >= start && date <= end;
+    });
+    this.setState({ result: filteredEmployees });
+  };
+
   sortEmployees = (propertyToSort) => {
     let sortedEmployees;
     let sortStatus;
@@ -75,7 +85,7 @@ class App extends React.Component {
         <div>
           <Header />
           <Wrapper>
-            <Navbar />
+            <Navbar filterEmployees={this.filterEmployees} />
             <Container>
               <ColumnHeaders sortEmployees={this.sortEmployees} />
               <List employees={this.state.result} />

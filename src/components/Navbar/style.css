@@ -19,6 +19,11 @@ p {
   color: #ffff00;
 }
 
+.dobSearch {
+  cursor: pointer;
+  font-weight: bolder;
+}
+
 .birthdate {
   width: 20%;
 }
