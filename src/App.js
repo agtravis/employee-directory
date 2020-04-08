@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import API from './utils/API';
 import './App.css';
 import Header from './components/Header';
@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import Container from './components/Container';
 import ColumnHeaders from './components/ColumnHeaders';
 import List from './components/List';
+import { EmployeeProvider, EmployeeContext } from './context/EmployeeContext';
 
 class App extends React.Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class App extends React.Component {
       startDate: `1980-01-01`,
       endDate: `1990-01-01`,
     };
+    // const [employees, setEmployees] = useContext(EmployeeContext);
   }
 
   componentDidMount() {
@@ -38,8 +40,9 @@ class App extends React.Component {
     searchString = searchString.toLowerCase();
     const foundByName = [...this.state.result].filter((employee) => {
       return (
-        employee.name.first.toLowerCase().indexOf(searchString) !== -1 ||
-        employee.name.last.toLowerCase().indexOf(searchString) !== -1
+        `${employee.name.first.toLowerCase()} ${employee.name.last.toLowerCase()}`.indexOf(
+          searchString
+        ) !== -1
       );
     });
     this.setState({ result: foundByName });
@@ -95,21 +98,23 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header />
-        <Wrapper>
-          <Navbar
-            filterEmployees={this.filterEmployees}
-            findByName={this.findByName}
-            handleChange={this.handleChange}
-            searchText={this.state.search}
-            startDate={this.state.startDate}
-            endDate={this.state.endDate}
-          />
-          <Container>
-            <ColumnHeaders sortEmployees={this.sortEmployees} />
-            <List employees={this.state.result} />
-          </Container>
-        </Wrapper>
+        <EmployeeProvider>
+          <Header />
+          <Wrapper>
+            <Navbar
+              filterEmployees={this.filterEmployees}
+              findByName={this.findByName}
+              handleChange={this.handleChange}
+              searchText={this.state.search}
+              startDate={this.state.startDate}
+              endDate={this.state.endDate}
+            />
+            <Container>
+              <ColumnHeaders sortEmployees={this.sortEmployees} />
+              <List employees={this.state.result} />
+            </Container>
+          </Wrapper>
+        </EmployeeProvider>
       </div>
     );
   }

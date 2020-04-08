@@ -1,70 +1,35 @@
 # Employee Directory
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+_There is a deliberate "error" in the UI, please read the further development section for an explanation!_
 
-## Available Scripts
+## Further Development
 
-In the project directory, you can run:
+As I mentioned at the start, and as you may have noticed if you already tested out the site, there is a pretty obvious "error" in the UI. I use the quotations because it is not really an error, it is by design. I'll explain....
 
-### `npm start`
+I wanted to implement React's `useContext` feature in my project. Upon completion to the brief, I was looking for ways to further enhance my project. I realized halfway through doing this that I was about to break a lot of my code, in as much as this kind of `hook` cannot be implemented _as is_ into a class component, only a function component. In order to avoid rewriting the whole class and all accompanying methods, and restructuring all the state elements involved, I decided to simply implement ONE case of my custom `useContext` hook in operation.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+As a result, you, the user, will always see the same one "fake" (all the employees are faked, but this one is double faked) employee at the top of the list, regardless of which search or organize functions are called. In fact, even when the search results should yield nothing (a name search for "kfjagkdgfa" should not return any results), this employee remains. Here is why:
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```js
+    function List(props) {
+        const [employees, setEmployees] = useContext(EmployeeContext);
+        const propsEmployees = [...props.employees];
+        propsEmployees.unshift(...employees);
+        return (
+            <ul className="list-group">
+            {propsEmployees.map((employee) =>
+```
 
-### `npm test`
+First I am importing an array `employees` from `EmployeeContext`. This is actually just an array of this one employee, with the JSON matching the format of the actual API response. A new array is created as a copy (since props are immutable) of the array containing all the API employees, and then the fake is added (using `unshift` so the fake is always first and appears at the top) to the array. Then the `.map` function which is responsible for generating what appears on the screen runs on this ammended array. So even when a search is run on the array, this fake is always added AFTER the search is performed.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+As I said, the only reason I am doing this is to demonstrate the technique of using `useContext`.
 
-### `npm run build`
+If I was to switch the class component in App over to a function, in order to continue to use the dynamic data, here is how I would do it:
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+From inside the `EmployeeContext` file, I am already exporting `setEmployees` as a function. Within the hypothetical App function component, I would include the following line:
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```js
+const [employees, setEmployees] = useContext(EmployeeContext);
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+and of course I would be sure to input all the relevant components for this to work (all `no-unused-vars` linting errors are related to this implementation). Instead of using `componentDidMount` for the API request I would be using `useEffect`, and now instead of calling `this.setState`, I would simply call `setEmployees`.
