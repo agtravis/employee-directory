@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import API from './utils/API';
 import './App.css';
 import Header from './components/Header';
@@ -7,117 +7,119 @@ import Navbar from './components/Navbar';
 import Container from './components/Container';
 import ColumnHeaders from './components/ColumnHeaders';
 import List from './components/List';
-import { EmployeeProvider, EmployeeContext } from './context/EmployeeContext';
+import EmployeeContext from './context/EmployeeContext';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      result: [],
-      lastSort: ``,
-      search: ``,
-      startDate: `1980-01-01`,
-      endDate: `1990-01-01`,
-    };
-    // const [employees, setEmployees] = useContext(EmployeeContext);
+function App() {
+  const [employees, setEmployees] = useState([]);
+  const [lastSort, setLastSort] = useState(``);
+  const [search, setSearch] = useState(``);
+  const [dates, setDates] = useState({
+    startDate: `1980-01-01`,
+    endDate: `1990-01-01`,
+  });
+
+  useEffect(() => {
+    searchEmployees();
+  }, []);
+
+  function handleChange(event, field) {
+    if (field === `search`) {
+      setSearch(event.target.value);
+    } else {
+      setDates({ ...dates, [field]: event.target.value });
+    }
   }
 
-  componentDidMount() {
-    this.searchEmployees();
-  }
-
-  handleChange = (event, field) => {
-    this.setState({ [field]: event.target.value });
-  };
-
-  searchEmployees = () => {
+  function searchEmployees() {
     API.search().then((res) => {
-      this.setState({ result: res.data.results });
+      setEmployees(res.data.results);
     });
-  };
+  }
 
-  findByName = (searchString) => {
+  function findByName(searchString) {
     searchString = searchString.toLowerCase();
-    const foundByName = [...this.state.result].filter((employee) => {
+    const foundByName = [...employees].filter((employee) => {
       return (
         `${employee.name.first.toLowerCase()} ${employee.name.last.toLowerCase()}`.indexOf(
           searchString
         ) !== -1
       );
     });
-    this.setState({ result: foundByName });
-  };
+    setEmployees(foundByName);
+  }
 
-  filterEmployees = (startDate, endDate) => {
+  function filterEmployees(startDate, endDate) {
     let start = new Date(startDate);
     let end = new Date(endDate);
-    const filteredEmployees = [...this.state.result].filter((employee) => {
+    const filteredEmployees = [...employees].filter((employee) => {
       let date = new Date(employee.dob.date);
       return date >= start && date <= end;
     });
-    this.setState({ result: filteredEmployees });
-  };
+    setEmployees(filteredEmployees);
+  }
 
-  sortEmployees = (propertyToSort) => {
+  function sortEmployees(propertyToSort) {
     let sortedEmployees;
     let sortStatus;
     switch (propertyToSort) {
       case `name`:
-        if (this.state.lastSort !== propertyToSort) {
-          sortedEmployees = this.state.result.sort((a, b) =>
+        if (lastSort !== propertyToSort) {
+          sortedEmployees = employees.sort((a, b) =>
             a.name.last > b.name.last ? 1 : -1
           );
           sortStatus = propertyToSort;
         } else {
-          sortedEmployees = this.state.result.sort((a, b) =>
+          sortedEmployees = employees.sort((a, b) =>
             a.name.last > b.name.last ? -1 : 1
           );
           sortStatus = ``;
         }
-        this.setState({ result: sortedEmployees, lastSort: sortStatus });
+        setEmployees(sortedEmployees);
+        setLastSort(sortStatus);
         break;
       case `dob`:
-        if (this.state.lastSort !== propertyToSort) {
-          sortedEmployees = this.state.result.sort((a, b) =>
+        if (lastSort !== propertyToSort) {
+          sortedEmployees = employees.sort((a, b) =>
             a.dob.date > b.dob.date ? 1 : -1
           );
           sortStatus = propertyToSort;
         } else {
-          sortedEmployees = this.state.result.sort((a, b) =>
+          sortedEmployees = employees.sort((a, b) =>
             a.dob.date > b.dob.date ? -1 : 1
           );
           sortStatus = ``;
         }
-        this.setState({ result: sortedEmployees, lastSort: sortStatus });
+        setEmployees(sortedEmployees);
+        setLastSort(sortStatus);
         break;
       default:
         console.log(`nothing provided`);
     }
-  };
-
-  render() {
-    return (
-      <div>
-        <EmployeeProvider>
-          <Header />
-          <Wrapper>
-            <Navbar
-              filterEmployees={this.filterEmployees}
-              findByName={this.findByName}
-              handleChange={this.handleChange}
-              searchText={this.state.search}
-              startDate={this.state.startDate}
-              endDate={this.state.endDate}
-            />
-            <Container>
-              <ColumnHeaders sortEmployees={this.sortEmployees} />
-              <List employees={this.state.result} />
-            </Container>
-          </Wrapper>
-        </EmployeeProvider>
-      </div>
-    );
   }
+
+  return (
+    <div>
+      <EmployeeContext.Provider value={{ search, dates, employees }}>
+        <Header />
+        <Wrapper>
+          <Navbar
+            filterEmployees={filterEmployees}
+            findByName={findByName}
+            handleChange={handleChange}
+            // searchText={this.state.search}
+            // startDate={this.state.startDate}
+            // endDate={this.state.endDate}
+          />
+          <Container>
+            <ColumnHeaders sortEmployees={sortEmployees} />
+            <List
+            //  employees={this.state.result}
+            />
+          </Container>
+        </Wrapper>
+      </EmployeeContext.Provider>
+    </div>
+  );
 }
 
 export default App;

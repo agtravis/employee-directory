@@ -1,14 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import './style.css';
-import { EmployeeContext } from '../../context/EmployeeContext';
+import EmployeeContext from '../../context/EmployeeContext';
 
-function List(props) {
-  const [employees, setEmployees] = useContext(EmployeeContext);
-  const propsEmployees = [...props.employees];
-  propsEmployees.unshift(...employees);
+function List() {
+  const { employees } = useContext(EmployeeContext);
+  // const propsEmployees = [...props.employees];
+  // propsEmployees.unshift(...employees);
   return (
     <ul className="list-group">
-      {propsEmployees.map((employee) => (
+      {employees.map((employee) => (
         <li key={employee.login.uuid} className="list-group-item">
           <div className="pic">
             <img
