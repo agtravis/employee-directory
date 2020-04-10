@@ -1,5 +1,59 @@
 # Employee Directory
 
+This is an app witten with React that enables a manager to quickly see and organize a list of employees by birthday, or search for a specific employee by name.
+
+Check out the repo [here](https://github.com/agtravis/employee-directory), and see the app in operation [here](https://agtravis.github.io/employee-directory/).
+
+This app runs in the browser - see [Setup](#setup) below for instructions on how to use.
+
+## Table of contents
+
+- [Screenshots](#screenshots)
+- [Technologies](#technologies)
+- [Code Examples](#code-examples)
+- [Setup](#setup)
+- [Features](#features)
+- [Status](#status)
+- [Contact](#contact)
+
+## Screenshots
+
+![Homepage](./public/assets/images/screenshots/landing-page.PNG)
+
+There is only one page to this app, and the results only re-organize or reduce.
+
+## Technologies
+
+This app was written in `JavaScript` running in `Node.JS`, and is written using the `React` library. It uses `axios` to populate the 'database' with a mock team of employees, via `randomuser.me`. On the front end it uses `Materialize` for some responsive elements and fonts among other natural imports, however it is NOT mobile-first.
+
+## Code Examples
+
+I initially wrote this app
+
+## Setup
+
+To set up this app as a user, you simply go to the website [here](https://rinqydinky.herokuapp.com/) and sign up for an account. All it requires is a username and password. From that point you are automatically logged in and ready to go, or on following visits you would login with those credentials. All your scores are stored in your own personal history, and users can delete any scores of their own with which they are unhappy. Users can also change their password from inside their profile.
+
+### Gameplay
+
+The rules of the space shooter game itself are very simple. You start with 3 lives, and if an enemy ship touches you, you lose a life. If you destroy an enemy, you score points, but if an enemy makes it to the bottom of the screen, you lose points (negative scores are totally possible). Different ships have different speeds, and will take varying amounts of points off your score. You will not be able to get every ship, so this game is about making decisions on the fly about which objectives are more important. Every 30 seconds when the game levels up, power-ups will appear containing extra lives, but don't shoot them! As the levels go up, the speed intensifies and the scores and penalties increase!
+
+Use the cursor keys to move around, and spacebar to shoot.
+
+## Features
+
+This app has a cool chat feature that enables users to talk to each other while playing. The fact that you have to sign up for an account makes it more competitive and helps identify individuals in the chat.
+
+## Status & Future Developement
+
+This app already achieves more than we set out to achieve. Our MVP was simply to provide a fun, basic game platform, using JavaScript, and running it in the browser. Adding the sign in and chat features brings us to MVP+. To take it to MVP++, we would like to have multiple games, all with their own accompanying high scores. The logical next step for MVP+++ would be to enable users to submit their own games to add to the arcade, and ultimately we could provide tools (spritesheets, tilemaps, code examples & tutorials) for users to do this.
+
+Multiplayer.....................................
+
+## Contact
+
+Created by [@agtravis](https://agtravis.github.io/) | [@agtravis](https://agtravis.github.io/) | [@ddhoang21](https://ddhoang21.github.io/My-Portfolio/)
+
 https://agtravis.github.io/employee-directory/
 
 _There is a deliberate "error" in the UI, please read the further development section for an explanation!_
