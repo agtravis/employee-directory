@@ -12,7 +12,6 @@ This app runs in the browser - see [Setup](#setup) below for instructions on how
 - [Technologies](#technologies)
 - [Code Examples](#code-examples)
 - [Setup](#setup)
-- [Features](#features)
 - [Status](#status)
 - [Contact](#contact)
 
@@ -28,64 +27,84 @@ This app was written in `JavaScript` running in `Node.JS`, and is written using 
 
 ## Code Examples
 
-I initially wrote this app
+I initially wrote this app based around class components and using `this.state` in the constructor and `componentDidMount` method to perform the API request (see an early commit of my `app.js` file [here](https://github.com/agtravis/employee-directory/blob/306eb5b9e89f6b110e1a0437c59e9bdfec206a14/src/App.js)), but after learning about `useContext`, I switched those classes to functions and switched over (this took a while, but was worth it upon completion!). I still am utilizing some `prop drilling` in situations where the data is smaller, so it can still be accessed via `props`.
+
+For an example of how the app code is traversed by a user, let's look at when a user sets the dates to narrow down the field of employees by birth date. In the UI, all the user does is select a start date and an end date, then click the button, and the results adapt (for convenient, `defaultValue`s have been set):
+
+```js
+const [dates, setDates] = useState({
+  startDate: `1980-01-01`,
+  endDate: `1990-01-01`,
+});
+```
+
+First, in `app.js`, `useState` is called and creates an object with two properties, a start date and an end date (here is where they are set by default). Two variables are deconstructed out of this, the conentional two, the first representing the state (in this case an object), and the second representing the function that will update the state when called.
+
+Also in `app.js` there is a function that will perform the filter:
+
+```js
+function filterEmployees(startDate, endDate) {
+  let start = new Date(startDate);
+  let end = new Date(endDate);
+  const filteredEmployees = [...employees].filter((employee) => {
+    let date = new Date(employee.dob.date);
+    return date >= start && date <= end;
+  });
+  setEmployees(filteredEmployees);
+}
+```
+
+This takes two parameters that will be passed in from the function call - the start date and end date that the user has selected. Since they are passed in as strings, they need to be formatted so they can be compared in the correct way by making them `Date` objects. Once this has been done, they can be use in the `filter` method to be compared to a Date object created on the employee's own date of birth. After this is done, the `setEmployees` method is called, and this sets the state of the employees to be the reduced array of employees just created. This `setState` (going on behind the scenes) causes the browser to re-render any component that uses this information.
+
+`filterEmployees` is passed down using `props`, and the dates themselves are passed to the `Context` file:
+
+```js
+return (
+  <div>
+    <EmployeeContext.Provider value={{ search, dates, employees, findByName }}>
+      <Header />
+      <Wrapper>
+        <Navbar filterEmployees={filterEmployees} handleChange={handleChange} />
+        <Container>
+          <ColumnHeaders sortEmployees={sortEmployees} />
+          <List />
+        </Container>
+      </Wrapper>
+    </EmployeeContext.Provider>
+  </div>
+);
+```
+
+`<EmployeeContext.Provider>` is essentially a wrapping `<div>` that allows anything inside it to have access to its contents. Following on with my example, specifically part of the value is set as `dates`. This sets up the context to store the dates properties. This can be seen in the Dev Tools for React specifically (under `hooks`):
+
+![Homepage](./public/assets/images/screenshots/dev-tools.PNG)
+
+I am passing one method in here, `findByName`, however I am passing the `filterEmployees` method through `props` directly in the `<Navbar>` component, seen in the above screen shot under `props`.
+
+Next, in the NavBar component, the following line:
+
+```js
+const { search, dates, findByName } = useContext(EmployeeContext);
+```
+
+gives this component access to the deconstructed properties of this context. At this point in my code, I am mixing the two methods of passing data. I could actually import the properties into the `<DateInput>` component, however, partly due to the legacy of how I initially wrote my code, and mainly due to demonstrative purposes, I have left it so that these properties imported from Context are then passed down to nested components using props - I understand this is redundant and would not do this in a professional project. Within the `<DateInput>` component, the `onChange` event listener handles what happens when the user change dates. I won't go into details, but the method is written so as it can be applied to multiple instances of use back in `app.js`. The function that runs the `filterEmployees` method is called `onClick` of the appropriate button:
+
+```js
+onClick={() => props.whenClicked(...props.args)}
+```
+
+`props.args` is spread because it is being passed an array of the values stored in context representing the start and end dates. And thus, the method is called and passed the information it needs to filter the employees and re-render.
 
 ## Setup
 
-To set up this app as a user, you simply go to the website [here](https://rinqydinky.herokuapp.com/) and sign up for an account. All it requires is a username and password. From that point you are automatically logged in and ready to go, or on following visits you would login with those credentials. All your scores are stored in your own personal history, and users can delete any scores of their own with which they are unhappy. Users can also change their password from inside their profile.
-
-### Gameplay
-
-The rules of the space shooter game itself are very simple. You start with 3 lives, and if an enemy ship touches you, you lose a life. If you destroy an enemy, you score points, but if an enemy makes it to the bottom of the screen, you lose points (negative scores are totally possible). Different ships have different speeds, and will take varying amounts of points off your score. You will not be able to get every ship, so this game is about making decisions on the fly about which objectives are more important. Every 30 seconds when the game levels up, power-ups will appear containing extra lives, but don't shoot them! As the levels go up, the speed intensifies and the scores and penalties increase!
-
-Use the cursor keys to move around, and spacebar to shoot.
-
-## Features
-
-This app has a cool chat feature that enables users to talk to each other while playing. The fact that you have to sign up for an account makes it more competitive and helps identify individuals in the chat.
+There is no setup, just access the website.
 
 ## Status & Future Developement
 
-This app already achieves more than we set out to achieve. Our MVP was simply to provide a fun, basic game platform, using JavaScript, and running it in the browser. Adding the sign in and chat features brings us to MVP+. To take it to MVP++, we would like to have multiple games, all with their own accompanying high scores. The logical next step for MVP+++ would be to enable users to submit their own games to add to the arcade, and ultimately we could provide tools (spritesheets, tilemaps, code examples & tutorials) for users to do this.
+Since this app mocks the database, each time it is refreshed a new set of employees is rendered. When filters are applied to the results array, those employees filtered out are lost for good as a result. If this was a real life application, the employees would be drawn from a database, and therefore a reset button could be implemented to remove filters, however in order to make this work I would need to establish a way of keeping the state of the database. There are various ways I could do this, I could copy the original response and draw from that, or I could mock a database with a JSON file, or I could create an actual database.
 
-Multiplayer.....................................
+The app also has had minimum styling applied to it, and is not mobile first.
 
 ## Contact
 
-Created by [@agtravis](https://agtravis.github.io/) | [@agtravis](https://agtravis.github.io/) | [@ddhoang21](https://ddhoang21.github.io/My-Portfolio/)
-
-https://agtravis.github.io/employee-directory/
-
-_There is a deliberate "error" in the UI, please read the further development section for an explanation!_
-
-## Further Development
-
-As I mentioned at the start, and as you may have noticed if you already tested out the site, there is a pretty obvious "error" in the UI. I use the quotations because it is not really an error, it is by design. I'll explain....
-
-I wanted to implement React's `useContext` feature in my project. Upon completion to the brief, I was looking for ways to further enhance my project. I realized halfway through doing this that I was about to break a lot of my code, in as much as this kind of `hook` cannot be implemented _as is_ into a class component, only a function component. In order to avoid rewriting the whole class and all accompanying methods, and restructuring all the state elements involved, I decided to simply implement ONE case of my custom `useContext` hook in operation.
-
-As a result, you, the user, will always see the same one "fake" (all the employees are faked, but this one is double faked) employee at the top of the list, regardless of which search or organize functions are called. In fact, even when the search results should yield nothing (a name search for "kfjagkdgfa" should not return any results), this employee remains. Here is why:
-
-```js
-    function List(props) {
-        const [employees, setEmployees] = useContext(EmployeeContext);
-        const propsEmployees = [...props.employees];
-        propsEmployees.unshift(...employees);
-        return (
-            <ul className="list-group">
-            {propsEmployees.map((employee) =>
-```
-
-First I am importing an array `employees` from `EmployeeContext`. This is actually just an array of this one employee, with the JSON matching the format of the actual API response. A new array is created as a copy (since props are immutable) of the array containing all the API employees, and then the fake is added (using `unshift` so the fake is always first and appears at the top) to the array. Then the `.map` function which is responsible for generating what appears on the screen runs on this ammended array. So even when a search is run on the array, this fake is always added AFTER the search is performed.
-
-As I said, the only reason I am doing this is to demonstrate the technique of using `useContext`.
-
-If I was to switch the class component in App over to a function, in order to continue to use the dynamic data, here is how I would do it:
-
-From inside the `EmployeeContext` file, I am already exporting `setEmployees` as a function. Within the hypothetical App function component, I would include the following line:
-
-```js
-const [employees, setEmployees] = useContext(EmployeeContext);
-```
-
-and of course I would be sure to input all the relevant components for this to work (all `no-unused-vars` linting errors are related to this implementation). Instead of using `componentDidMount` for the API request I would be using `useEffect`, and now instead of calling `this.setState`, I would simply call `setEmployees`.
+Created by [@agtravis](https://agtravis.github.io/)
