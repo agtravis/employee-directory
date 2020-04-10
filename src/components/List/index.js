@@ -4,8 +4,6 @@ import EmployeeContext from '../../context/EmployeeContext';
 
 function List() {
   const { employees } = useContext(EmployeeContext);
-  // const propsEmployees = [...props.employees];
-  // propsEmployees.unshift(...employees);
   return (
     <ul className="list-group">
       {employees.map((employee) => (

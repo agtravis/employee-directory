@@ -99,22 +99,18 @@ function App() {
 
   return (
     <div>
-      <EmployeeContext.Provider value={{ search, dates, employees }}>
+      <EmployeeContext.Provider
+        value={{ search, dates, employees, findByName }}
+      >
         <Header />
         <Wrapper>
           <Navbar
             filterEmployees={filterEmployees}
-            findByName={findByName}
             handleChange={handleChange}
-            // searchText={this.state.search}
-            // startDate={this.state.startDate}
-            // endDate={this.state.endDate}
           />
           <Container>
             <ColumnHeaders sortEmployees={sortEmployees} />
-            <List
-            //  employees={this.state.result}
-            />
+            <List />
           </Container>
         </Wrapper>
       </EmployeeContext.Provider>

@@ -5,7 +5,7 @@ import Button from '../Button';
 import EmployeeContext from '../../context/EmployeeContext';
 
 function Navbar(props) {
-  const { search, dates } = useContext(EmployeeContext);
+  const { search, dates, findByName } = useContext(EmployeeContext);
   const inputStyle = {
     width: '20%',
     backgroundColor: 'white',
@@ -33,7 +33,7 @@ function Navbar(props) {
           field={`endDate`}
         />
         <Button
-          whenClicked={props.findByName}
+          whenClicked={findByName}
           args={[search]}
           text={`Search by Name:`}
         />
@@ -46,7 +46,7 @@ function Navbar(props) {
           onChange={(event) => props.handleChange(event, `search`)}
           onKeyUp={(event) => {
             if (event.key === `Enter`) {
-              props.findByName(search);
+              findByName(search);
             }
           }}
         />
